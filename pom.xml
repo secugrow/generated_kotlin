@@ -6,6 +6,7 @@
   <groupId>at.some.test</groupId>
   <artifactId>secugrowTestArchetype</artifactId>
   <version>1.0-SNAPSHOT</version>
+  <logo>https://raw.githubusercontent.com/secugrow/kotlin-archetype/main/docs/pics/SeCu_Logo.png</logo>
 
   <name>Selenium Cucumber Generator - SeCuGrow</name>
 
