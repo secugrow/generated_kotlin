@@ -15,7 +15,7 @@ class RemoteChromeMobileWebDriverFactory : RemoteWebDriverFactory() {
     override fun createDriver(): WebDriver {
 
         caps.browserName = "chrome"
-        caps.version = "mobile-${ getBrowserVersion()}"
+        caps.setVersion("mobile-${ getBrowserVersion()}")
         caps.setCapability("adbExecTimeout", 120000)
 
         val options = ChromeOptions()
