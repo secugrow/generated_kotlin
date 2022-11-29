@@ -4,7 +4,6 @@ package at.some.test.driverutil
 
 import io.appium.java_client.AppiumDriver
 import io.appium.java_client.android.AndroidDriver
-import io.appium.java_client.android.AndroidElement
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.remote.RemoteWebDriver
@@ -27,7 +26,7 @@ class RemoteChromeMobileWebDriverFactory : RemoteWebDriverFactory() {
 
         options.setCapability("sessionTimeout", "15m")
 
-        webDriver = AppiumDriver<AndroidElement>(URI.create("${ getRemoteTestingServer()}/wd/hub").toURL(), options)
+        webDriver = AppiumDriver(URI.create("${ getRemoteTestingServer()}/wd/hub").toURL(), options)
         webDriver.manage().window().maximize()
         return webDriver
     }
