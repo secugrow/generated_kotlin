@@ -11,11 +11,9 @@ class RemoteChromeWebDriverFactory : RemoteWebDriverFactory() {
     override fun createDriver(): WebDriver {
 
         caps.browserName = "chrome"
-
         val options = ChromeOptions()
-        options.merge(caps)
 
-        webDriver = RemoteWebDriver(URI.create("${ getRemoteTestingServer()}/wd/hub").toURL(), options)
+        webDriver = RemoteWebDriver(URI.create("${ getRemoteTestingServer()}/wd/hub").toURL(), options.merge(caps))
         webDriver.manage().window().maximize()
 
         return webDriver
