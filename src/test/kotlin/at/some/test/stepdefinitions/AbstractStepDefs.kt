@@ -1,5 +1,5 @@
 
-package at.some.test.step_definitions
+package at.some.test.stepdefinitions
 
 import assertk.fail
 import at.some.test.driverutil.PageNotFoundException

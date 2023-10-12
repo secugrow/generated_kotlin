@@ -1,4 +1,4 @@
-package at.some.test.step_definitions
+package at.some.test.stepdefinitions
 
 import at.some.test.driverutil.DriverType
 import io.cucumber.java.Scenario
