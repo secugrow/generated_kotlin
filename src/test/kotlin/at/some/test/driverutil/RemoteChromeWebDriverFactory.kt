@@ -19,5 +19,4 @@ class RemoteChromeWebDriverFactory : RemoteWebDriverFactory() {
 
         return webDriver
     }
-
 }

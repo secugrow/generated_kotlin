@@ -3,7 +3,6 @@
 package at.some.test.driverutil
 
 import io.appium.java_client.AppiumDriver
-import io.appium.java_client.remote.MobileCapabilityType
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeOptions
 import java.net.URI
@@ -15,7 +14,7 @@ class RemoteChromeMobileWebDriverFactory : RemoteWebDriverFactory() {
         //caps.setCapability("adbExecTimeout", 120000)
         val options = ChromeOptions().merge(caps)
         options.setBrowserVersion("mobile-${ getBrowserVersion()}")
-        options.setCapability(MobileCapabilityType.BROWSER_NAME, "chrome")
+        options.setCapability("browserName", "chrome")
 
         //BUG in Android selenoid Image, 20.06.2019
         options.setCapability("enableVNC", false)

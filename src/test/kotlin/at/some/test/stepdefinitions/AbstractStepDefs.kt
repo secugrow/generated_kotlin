@@ -1,24 +1,25 @@
 
 package at.some.test.stepdefinitions
 
-import assertk.fail
 import at.some.test.driverutil.PageNotFoundException
 import at.some.test.driverutil.WebDriverSession
 import at.some.test.driverutil.WebDriverSessionStore
-import org.openqa.selenium.WebDriver
-import org.openqa.selenium.chrome.ChromeDriver
-import org.openqa.selenium.remote.RemoteWebDriver
 import at.some.test.pageobjects.AbstractPage
 import io.cucumber.java8.En
 import io.cucumber.java.Scenario
+import logger
+import org.assertj.core.api.Assertions.fail
+import org.openqa.selenium.WebDriver
+import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.remote.RemoteWebDriver
 
 import at.some.test.a11y.A11yHelper
-
-import kotlin.reflect.KClass
-import logger
 import org.assertj.core.description.TextDescription
 import org.openqa.selenium.OutputType
 import org.openqa.selenium.TakesScreenshot
+
+
+import kotlin.reflect.KClass
 
 open class AbstractStepDefs(protected val testDataContainer: TestDataContainer) : En {
 
@@ -113,11 +114,12 @@ open class AbstractStepDefs(protected val testDataContainer: TestDataContainer) 
 
 fun extractTestIdFromScenarioName(scenarioName: String): String {
     val regex = "^\\[(.*) \\[.*\$".toRegex()
-    try {
-        return regex.find(scenarioName)!!.groups[1]!!.value
-    } catch (e: NullPointerException) {
+    return runCatching {
+        regex.find(scenarioName)!!.groups[1]!!.value
+    }.getOrElse {
         fail("Scenarioname is not correct formated $scenarioName. Pattern: '[XXX-99 [Filename]")
     }
+
 }
 
 

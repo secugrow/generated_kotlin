@@ -1,10 +1,10 @@
-
 package at.some.test.driverutil
 
+
+
 import io.appium.java_client.android.AndroidDriver
-import io.appium.java_client.remote.MobileCapabilityType
 import org.openqa.selenium.WebDriver
-import java.net.URL
+import java.net.URI
 
 class RemoteAndroidWebDriverFactory : RemoteWebDriverFactory() {
     override fun createDriver(): WebDriver {
@@ -17,15 +17,15 @@ class RemoteAndroidWebDriverFactory : RemoteWebDriverFactory() {
         caps.setCapability("sessionTimeout", "15m")
 
         caps.setCapability("noReset", false)
-        caps.setCapability(MobileCapabilityType.UDID, System.getProperty("device.id", "emulator-5554"))//"DEFAULT_ANDROID_DEVICE_ID"))
-        caps.setCapability(MobileCapabilityType.PLATFORM_NAME, "Android")
-        caps.setCapability(MobileCapabilityType.DEVICE_NAME, "Android_Device_Appium")
-        caps.setCapability(MobileCapabilityType.AUTOMATION_NAME, "UiAutomator2")
-        caps.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, 12000)
+        caps.setCapability("udid", System.getProperty("device.id", "emulator-5554"))//"DEFAULT_ANDROID_DEVICE_ID"))
+        caps.setCapability("platformName", "Android")
+        caps.setCapability("deviceName", "Android_Device_Appium")
+        caps.setCapability("automationName", "UiAutomator2")
+        caps.setCapability("newCommandTimeout", 12000)
 
-        webDriver = AndroidDriver(URL("${ getRemoteTestingServer()}/wd/hub"), caps)
+        webDriver = AndroidDriver(URI.create("${ getRemoteTestingServer()}/wd/hub").toURL(), caps)
+
         return webDriver
 
     }
-
 }

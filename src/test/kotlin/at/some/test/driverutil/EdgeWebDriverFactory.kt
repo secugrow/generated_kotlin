@@ -1,13 +1,11 @@
 package at.some.test.driverutil
 
-import io.github.bonigarcia.wdm.WebDriverManager
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.edge.EdgeDriver
 
 class EdgeWebDriverFactory : WebDriverFactory(){
     override fun createDriver(): WebDriver {
 
-        WebDriverManager.edgedriver().driverVersion(getBrowserVersion()).setup()
         checkEnvironment()
 
         webDriver = EdgeDriver()
