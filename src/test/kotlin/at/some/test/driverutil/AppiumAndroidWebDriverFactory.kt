@@ -1,16 +1,10 @@
+package at.some.test.driverutil
+
 import io.appium.java_client.android.AndroidDriver
+import io.appium.java_client.android.options.UiAutomator2Options
 import org.assertj.core.api.Assertions.fail
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.WebDriverException
-import java.net.URI
-
-package ${ package }.driverutil
-
-import io.appium.java_client.android.AndroidDriver
-import org.assertj.core.api.Assertions.fail
-import org.openqa.selenium.WebDriver
-import org.openqa.selenium.WebDriverException
-import org.openqa.selenium.chrome.ChromeOptions
 import java.net.URI
 
 class AppiumAndroidWebDriverFactory : RemoteWebDriverFactory() {
@@ -22,7 +16,6 @@ class AppiumAndroidWebDriverFactory : RemoteWebDriverFactory() {
         uiAutomator2Options.setPlatformName("Android")
         uiAutomator2Options.setDeviceName("Appium_Android_Device")
         uiAutomator2Options.withBrowserName("chrome")
-
         uiAutomator2Options.setNoReset(true)
         uiAutomator2Options.setCapability(
             "chromeOptions", mapOf(
