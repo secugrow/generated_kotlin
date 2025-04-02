@@ -1,6 +1,6 @@
 package at.some.test.pageobjects;
 
-import at.some.test.webdriversession.WebDriverSession;
+import at.some.test.driverutil.WebDriverSession;
 import org.openqa.selenium.By
 import org.openqa.selenium.support.ui.ExpectedConditions
 
