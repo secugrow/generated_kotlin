@@ -1,8 +1,9 @@
 package at.some.test.stepdefinitions
 
 import at.some.test.driverutil.WebDriverSessionStore
-import at.some.test.driverutil.isMobile
+import at.some.test.driverutil.DevicePool
 import at.some.test.driverutil.DriverType
+import at.some.test.driverutil.extensions.isMobile
 import io.appium.java_client.android.AndroidDriver
 import io.cucumber.java.After
 import io.cucumber.java.AfterStep
@@ -30,6 +31,7 @@ class Hooks(private val testDataContainer: TestDataContainer) {
 
     private val log by logger()
     private val skipA11Y = System.getProperty("skipA11y", "true").toBoolean()
+    private val isAppium = System.getProperty("browser", "") == "appium_android_device"
 
     @BeforeStep
     fun beforeStep() {
@@ -38,6 +40,17 @@ class Hooks(private val testDataContainer: TestDataContainer) {
 
     @Before
     fun beforeScrenario(scenario: Scenario) {
+
+        /*
+         * Acquire a device from the pool before the scenario starts.
+         * -Ddevices is always used for Appium runs (bare metal or Docker),
+         * resolved dynamically via adb devices at mvn invocation time.
+         */
+        if (isAppium && DevicePool.isEnabled()) {
+            val serial = DevicePool.acquire()
+            testDataContainer.setTestData("device.serial", serial)
+            log.info("Acquired device ${ serial } for scenario: ${ scenario.name }")
+        }
 
         val fillchar = '#'
         val debuglength = 80
@@ -97,6 +110,12 @@ class Hooks(private val testDataContainer: TestDataContainer) {
 
         if (!scenario.isFailed) {
             WebDriverSessionStore.quitAll()
+            // Release device back to pool after scenario completes
+            if (isAppium && DevicePool.isEnabled()) {
+                val serial = testDataContainer.getAs<String>("device.serial")
+                DevicePool.release(serial)
+                log.info("Released device ${ serial }")
+            }
             return
         }
 
@@ -139,6 +158,12 @@ class Hooks(private val testDataContainer: TestDataContainer) {
 
             } finally {
                 WebDriverSessionStore.remove(testId)
+                // Release device back to pool after failed scenario
+                if (isAppium && DevicePool.isEnabled()) {
+                    val serial = testDataContainer.getAs<String>("device.serial")
+                    DevicePool.release(serial)
+                    log.info("Released device ${ serial }")
+                }
             }
         }
     }

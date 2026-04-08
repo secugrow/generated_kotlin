@@ -1,4 +1,4 @@
-package at.some.test.driverutil
+package at.some.test.driverutil.extensions
 
 import org.openqa.selenium.Keys
 import org.openqa.selenium.WebElement
