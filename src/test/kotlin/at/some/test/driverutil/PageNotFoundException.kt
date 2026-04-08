@@ -1,3 +1,14 @@
 package at.some.test.driverutil
 
-class PageNotFoundException(message: String) : RuntimeException(message)
+import logger
+
+class PageNotFoundException(s: String) : Throwable() {
+
+    private val log by logger()
+
+    init {
+        log.error(s)
+    }
+
+
+}

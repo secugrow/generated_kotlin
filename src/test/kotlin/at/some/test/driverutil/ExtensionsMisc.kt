@@ -1,4 +1,4 @@
-package at.some.test.driverutil.extensions
+package at.some.test.driverutil
 
 import java.security.MessageDigest
 

@@ -1,5 +1,5 @@
-package at.some.test.driverutil.factory
-import at.some.test.driverutil.DevicePool
+package at.some.test.driverutil
+
 import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.android.options.UiAutomator2Options
 import org.assertj.core.api.Assertions.fail
@@ -17,7 +17,6 @@ class AppiumAndroidWebDriverFactory : RemoteWebDriverFactory() {
         uiAutomator2Options.setDeviceName("Appium_Android_Device")
         uiAutomator2Options.withBrowserName("chrome")
         uiAutomator2Options.setNoReset(true)
-        uiAutomator2Options.setCapability("appium:chromedriver_autodownload", true)
         uiAutomator2Options.setWebSocketUrl(true)
         uiAutomator2Options.setCapability(
             "chromeOptions", mapOf(
@@ -37,6 +36,8 @@ class AppiumAndroidWebDriverFactory : RemoteWebDriverFactory() {
         return webDriver
     }
 
-    private fun getMobileDeviceId(): String = DevicePool.current()
+    private fun getMobileDeviceId(): String {
+        return System.getProperty("device.id", "emulator-5554")
+    }
 
 }

@@ -1,12 +1,9 @@
 package at.some.test.driverutil
 
 
-import at.some.test.driverutil.strategy.DriverContext
-import at.some.test.driverutil.extensions.isMobile
 import at.some.test.pageobjects.AbstractPage
 import at.some.test.pageobjects.PageUrls
 import at.some.test.stepdefinitions.TestDataContainer
-import logger
 import org.assertj.core.api.Assertions.fail
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.remote.RemoteWebDriver
@@ -15,16 +12,12 @@ import java.time.Duration
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
-class WebDriverSession(private val testId: String, private val driverContext: DriverContext) {
+class WebDriverSession(private val testId: String) {
 
-    private val log by logger()
     var currentPage: AbstractPage? = null
     private var lastPage: AbstractPage? = null
-    val webDriver: WebDriver by lazy { driverContext.createWebDriverFromSystemProperties() }
-    val wdwait: WebDriverWait by lazy {
-        val timeout = driverContext.getFactory()?.timeout ?: WEBDRIVER_TIMEOUT_SECONDS
-        WebDriverWait(webDriver, Duration.ofSeconds(timeout))
-    }
+    val webDriver: WebDriver by lazy { DriverFactory.createWebDriver(testId) }
+    val wdwait: WebDriverWait by lazy { WebDriverWait(webDriver, Duration.ofSeconds(WEBDRIVER_TIMEOUT_SECONDS)) }
     private val baseUrl: String by lazy {
         if (System.getProperty("baseUrl").isBlank()) {
             fail<Nothing>("No BaseUrl is defined, do not know where to run the tests. Use '-DbaseUrl' to add the url where testenvironment is running ")
@@ -32,24 +25,12 @@ class WebDriverSession(private val testId: String, private val driverContext: Dr
         System.getProperty("baseUrl")
     }
 
-    init {
-        // Log if headless mode is enabled
-        if (driverContext.getFactory()?.headless == true) {
-            log.info("Running in headless mode")
-        }
-    }
-
     fun isMobile(): Boolean {
         return (webDriver as RemoteWebDriver).isMobile()
     }
 
-    /**
-     * Closes the WebDriver session and cleans up resources.
-     * Uses the factory's cleanup method to ensure proper resource management.
-     */
     fun close() {
-        log.info("Closing WebDriver session for test ID: $testId")
-        driverContext.getFactory()?.cleanup() ?: webDriver.quit()
+        webDriver.quit()
         currentPage = null
     }
 

@@ -28,19 +28,19 @@ smooth usage of test data among all steps.
   `mvn test -Dbrowser=chrome -Dheadless=true -DbaseUrl="https://www.wikipedia.org" -Dcucumber.filter.tags=@all`
 
 * Option 2: Start directly from IDEA with a runConfiguration
-  ![idea run configuration](docs/images/idea_runConfig.png)
+  ![idea run configuration](src/test/resources/docs/idea_runConfig.png)
   Use the runConfiguration File which is located in the resources-folder and adapt the parameter for your need
 
 In both cases you need to define some parameters to get the tests running:
 
-| Name | Description |
-|------|-------------|
-| baseUrl* | The base URL for your website under test. |
-| browser | Choose the browser type. Allowed values are defined in DriverTypes Class. default = chrome |
+| Name            | Description                                                                                                                                    |
+|-----------------|------------------------------------------------------------------------------------------------------------------------------------------------|
+| baseUrl*        | The base URL for your website under test.                                                                                                      |
+| browser         | Choose the browser type. Allowed values are defined in DriverTypes Class. default = chrome                                                     |
 | browser.version | If you do not want to use the latest browser version, which is provided by the Webdriver manager, you can set the version with this parameter. |
-| selenium.grid | URL of Selenium grid server or a service which implements the Selenium grid protocol like Selenoid or Appium. |
-| devices | Comma-separated list of Android device serials for Appium execution. Resolved dynamically via `adb devices` — see example below. Works with one or more connected devices. |
-| skipA11y | default = true, false -> activates the accessibility audits while your testruns (if you created your project with (-Da11y=true) |
+| selenium.grid   | URL of Selenium grid server or a service which implements the Selenium grid protocol like Selenoid or Appium.                                  |
+| device.id       | only used if you want to run with mit mobile-chrome (Android or iOS id)                                                                        |
+| skipA11y        | default = true, false -> activates the accessiblity audtis while your testruns (if you created your project with (-Da11y=true)                 |
 
 \* is mandatory
 
@@ -53,7 +53,7 @@ Example runtime parameters:
     -Dbrowser=chrome
     -DbaseUrl="http://www.wikipedia.org"
 
-If you need to pass additional capabilities for your environment (selenoid, selenium grid or a cloud provider of your choice)
+If you need to pass additional capabilites for your environment (selenoid, selenium grid or a cloud provider of your choice)
 you can name the provider with:
 
     -Dremote.options=selenoid
@@ -92,11 +92,6 @@ to the step definitions via text search in your IDE.
 ![testresults jenkins overview](src/test/resources/docs/jenkins_overall.png)
 ![testresults jenkins feature](src/test/resources/docs/jenkins_feature.png)
 #Supported Browser in DriverType enum
-![testresults from IntelliJ](docs/images/testresults_idea.png)
-![testresults jenkins overview](docs/images/jenkins_overview.png)
-![testresults jenkins feature](docs/images/jenkins_feature.png)
-
-# Supported Browser in DriverType enum
 Setup will be done via WebDriverManager as mentioned above.
 
 ### regular Browsers for local run
@@ -127,36 +122,27 @@ Example of a runtime configuration for an emulated Pixel 2 with a desktop Chrome
 ### Android device (via Appium)
 
 You can use an emulated device (AVD Manager) or a connected real device, which both have to be supported by Appium.
-Connected devices are discovered automatically via `adb devices` — the same command works whether one or multiple devices are connected.
 
-**Bare metal** — `adb` is installed locally on the machine running the tests:
+    boris:~/Android/Sdk/platform-tools$ ./adb devices
+    List of devices attached
+    emulator-5554	device
 
-```shell
-mvn test \
-  -Dbrowser=appium_android_device \
-  -DbaseUrl="https://www.wikipedia.org" \
-  -Dselenium.grid=http://localhost:4723 \
-  -Dcucumber.filter.tags=@all \
-  -Ddevices=$(adb devices | grep -w device | awk '{print $1}' | paste -sd,)
-```
+Use parameter to set the ID `-Ddevice.id="emulator-5554"`
 
-**Docker** — `adb` is only available inside the Appium container, query it via `docker exec`:
+Example of runtime configuration for running a test on a emulated Android device on Appium (which runs locally on Port
+4723):
 
-```shell
-mvn test \
-  -Dbrowser=appium_android_device \
-  -DbaseUrl="https://www.wikipedia.org" \
-  -Dselenium.grid=http://localhost:4723 \
-  -Dcucumber.filter.tags=@all \
-  -Ddevices=$(docker exec appium-server adb devices | grep -w device | awk '{print $1}' | paste -sd,)
-```
+        -Dbrowser=appium_android_device
+        -DbaseUrl="http://www.wikipedia.org"
+        -Dselenium.grid=http://localhost:4723
+        -Ddevice.id="emulator-5554"
 
 # Troubleshooting
 
 ## IDEA Configuration
 
-If the generated project does not compile or cannot be started from IDEA, check the Version of the JDK.
-Use a JDK Version above 17.
+If the generated project does not compile or cannot be started from IDEA, check the Version of the JDK
+Use an JDK Version above 17
 
 * File - Project Structure ...
   ![name](src/test/resources/docs/project_sdk_settings.png)
